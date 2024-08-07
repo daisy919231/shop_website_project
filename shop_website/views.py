@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+
 # Create your views here.
 def product_list(request, category_id: Optional[int]=None ):
     categories=Category.objects.all().order_by('id')
