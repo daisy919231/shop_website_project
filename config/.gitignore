@@ -11,7 +11,7 @@
 # Ignore IDE specific files
 .idea/
 .vscode/
-db.sqlite3
+db.sqlite3/
 venv/
 
 .Python
