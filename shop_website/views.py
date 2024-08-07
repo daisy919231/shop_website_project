@@ -35,7 +35,8 @@ def product_list(request, category_id: Optional[int]=None ):
         products=products.filter(Q(name__icontains=search)| Q(comments__comment__icontains=search)).distinct()
     context={
     'products': products,
-    'categories': categories } 
+    'categories': categories 
+    } 
     return render (request, 'shop_website/home.html', context)
 
 # def product_details (request, product_id):
