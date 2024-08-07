@@ -37,22 +37,46 @@ def product_list(request, category_id: Optional[int]=None ):
     'categories': categories } 
     return render (request, 'shop_website/home.html', context)
 
-def product_details (request, product_id, category_id, displayed_product_id):
+# def product_details (request, product_id):
+#     search=request.GET.get('q')
+#     categories=Category.objects.all()
+#     category_id=request.GET.get('category_id')
+#     displayed_product_id=request.GET.get('displayed_product_id')
+#     displayed_products=Product.objects.filter(category=category_id).exclude(id=displayed_product_id)
+#     product=Product.objects.get(id=product_id)
+#     comments=Comment.objects.filter(product=product_id, is_provided=True).order_by('-id')
+#     if search:
+#         comments=comments.filter(Q(comment__icontains=search))
+#         # if not related to only one product, but for all products:
+#         # comments=Comment.objects.filter(Q(comment__icontains=search))
+#     context={
+#         'product': product,
+#         'displayed_products': displayed_products,
+#         'comments': comments,
+#         'categories': categories, 
+#         }
+#     return render (request, 'shop_website/detail.html', context)
+
+def product_details (request, product_id):
     search=request.GET.get('q')
     categories=Category.objects.all()
-    product=Product.objects.get(id=product_id)
     comments=Comment.objects.filter(product=product_id, is_provided=True).order_by('-id')
+    product=Product.objects.get(id=product_id)
+    if product:
+        displayed_products=Product.objects.filter(category=product.category).exclude(id=product_id)
+    
     if search:
         comments=comments.filter(Q(comment__icontains=search))
         # if not related to only one product, but for all products:
         # comments=Comment.objects.filter(Q(comment__icontains=search))
     context={
         'product': product,
+        'displayed_products': displayed_products,
         'comments': comments,
         'categories': categories, 
-        'comments': comments
         }
     return render (request, 'shop_website/detail.html', context)
+
 
 
 # def add_comment(request, product_id):
@@ -207,13 +231,13 @@ def edit_product(request, product_id):
 
     return render (request, 'shop_website/edit-product.html', context)
 
-def related_products(request, category_id, displayed_product_id):
-    category=get_object_or_404(Category, id=category_id)
-    products=Product.objects(category=category).exclude(id=displayed_product_id)
-    context={
-        'category':category,
-        'products':products,
-    }
-    return render (request, 'shop_website/detail.html', context)
+# def related_products(request, category_id, displayed_product_id):
+#     category=get_object_or_404(Category, id=category_id)
+#     products=Product.objects(category=category).exclude(id=displayed_product_id)
+#     context={
+#         'category':category,
+#         'products':products,
+#     }
+#     return render (request, 'shop_website/detail.html', context)
 
 
