@@ -34,7 +34,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-white" aria-labelledby="dropdownMenuButton2">
                                 {% for category in categories %}
-                                    <li><a class="dropdown-item" href="{% url 'category_detail_id' category.id %}">{{ category.title }}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'category_detail_id' category.slug %}">{{ category.title }}</a></li>
                                 {% empty %}
                                     <li><a class="dropdown-item" href="#!">No categories available</a></li>
                                 {% endfor %}

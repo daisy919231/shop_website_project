@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils.text import slugify
+from django.utils.html import mark_safe
+
 
 class BaseModel(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
@@ -9,9 +12,18 @@ class BaseModel(models.Model):
 
 class Category(models.Model):
     title=models.CharField(max_length=70, unique=True)
+    slug=models.SlugField(null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug=slugify(self.title)
+        super(Category,self).save(*args, **kwargs)
+
+
 
     class Meta:
         verbose_name_plural='Categories'
+        db_table='Category'
 
     def __str__(self) -> str:
         return self.title
@@ -34,6 +46,15 @@ class Product(BaseModel):
     rating=models.PositiveIntegerField(choices=RatingChoices.choices, default=RatingChoices.zero.value)
     discount=models.PositiveIntegerField(default=0)
     image=models.ImageField(upload_to='products', default='sample_image.pg')
+
+    class Meta:
+        db_table='Product'
+
+
+    
+    def image_tag(self):
+        return mark_safe('<img src="/products/%s" width="300" />' % (self.image))
+    image_tag.short_description="Image"
 
     @property
     def discounted_price(self):
@@ -68,7 +89,8 @@ class Comment(BaseModel):
     comment=models.TextField()
     is_provided=models.BooleanField(default=True)
     
-   
+    class Meta:
+        db_table='Comment'
 
 #     class Meta:
 #         constraints = [
@@ -81,12 +103,13 @@ class Comment(BaseModel):
 class Order(BaseModel):
     name=models.CharField(max_length=100)
     phone_number=models.CharField(max_length=13)
-    product=models.ForeignKey('Product', on_delete=models.CASCADE)
+    product=models.ForeignKey('Product', on_delete=models.CASCADE, related_name='orders')
     order_quantity=models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return (self.name + '' + self.phone_number)
-
+    class Meta:
+        db_table='Order'
 
 #     class Meta:
 #         constraints = [
