@@ -51,6 +51,18 @@
                     </form>
                 </div>
             </div>
+            {% if user.is_authenticated   %}
+            <form method="post" action="{% url 'logout_page' %}" >
+                {% csrf_token %}
+                <div> 
+                    <mark> <b>{{user.username}}</b></mark><button type="submit" class="btn btn-danger">Logout</button>
+                </div>
+            </form>
+            {% else %}
+                <div> 
+                    <a href="{% url 'login_page' %}" ><button type="submit" class="btn btn-primary">Login</button></a>
+                </div>
+            {% endif %}
         </nav>
         {% block main_content %}
         {% endblock %}

@@ -11,7 +11,7 @@ from shop_website.simple_admin_filter import IsExpensiveFilter, IsLotFilter
 # admin.site.register(Comment)
 # admin.site.register(Order)
 
-admin.site.unregister(User)
+# admin.site.register(User)
 admin.site.unregister(Group)
 
 
@@ -32,18 +32,24 @@ class CategoryModelAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
-    list_display=('name', 'price', 'discount', 'category', 'image_tag', 'is_expensive')
+    list_display=('name', 'slug', 'price', 'comment_count', 'order_count', 'category', 'is_expensive',) #'image_tag',)
     list_filter=('discount', IsExpensiveFilter)
-    search_fields=['name', 'id']
-    fields=['image_tag']
-    readonly_fields=['image_tag']
+    search_fields=['name', 'price']
+    # fields=['image_tag']
+    # readonly_fields=['image_tag']
     
     def is_expensive(self,obj):
         return obj.price > 500
     
     is_expensive.boolean=True
 
-    
+
+    def comment_count(self, obj):
+        return obj.comments.count()
+
+    def order_count(self, obj):
+        return obj.orders.count()
+
 
     
 
@@ -52,8 +58,7 @@ class CommentModelAdmin(admin.ModelAdmin):
     list_display=('id', 'name', 'product')
     search_fields=['title', 'email']
 
-    def comment_count(self, obj):
-        return obj.comments.count()
+    
 
 @admin.register(Order)
 class OrderModelAdmin(admin.ModelAdmin):
@@ -67,5 +72,4 @@ class OrderModelAdmin(admin.ModelAdmin):
     is_lot.boolean=True
 
 
-    def comment_count(self, obj):
-        return obj.orders.count()
+    

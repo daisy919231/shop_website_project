@@ -46,6 +46,15 @@ class Product(BaseModel):
     rating=models.PositiveIntegerField(choices=RatingChoices.choices, default=RatingChoices.zero.value)
     discount=models.PositiveIntegerField(default=0)
     image=models.ImageField(upload_to='products', default='sample_image.pg')
+    slug=models.SlugField(null=True, blank=True)
+
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug=slugify(self.name)
+        super(Product,self).save(*args, **kwargs)
+
+
 
     class Meta:
         db_table='Product'

@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 class IsExpensiveFilter(admin.SimpleListFilter):
     title = 'is_expensive'
     parameter_name = 'is_expensive'
@@ -17,6 +18,10 @@ class IsExpensiveFilter(admin.SimpleListFilter):
             return queryset.filter(price__lt=500)
         return queryset
     
+
+
+
+    
 class IsLotFilter(admin.SimpleListFilter):
     title = 'is_lot'
     parameter_name = 'is_lot'
@@ -32,5 +37,6 @@ class IsLotFilter(admin.SimpleListFilter):
         if value == 'Yes':
             return queryset.filter(order_quantity__gt=5)
         elif value == 'No':
-            return queryset.filter(order_quantity__lt=5)
+            return queryset.filter(order_quantity__lt=5
+                                   )
         return queryset

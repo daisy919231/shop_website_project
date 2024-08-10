@@ -13,6 +13,8 @@
 .vscode/
 db.sqlite3
 venv/
+venv
+.venv
 
 .Python
 [Bb]in
